@@ -143,6 +143,21 @@ Before any fine-tuning, establish a **zero-shot LLM baseline** on the locked tes
 
 **Checkpoint (Milestone 4 done when):** baseline overall accuracy **and** at least a per-class breakdown exist for the test set, the fine-tuned model has **not** yet been run on this test set, and the baseline numbers are **saved somewhere referenceable** for the evaluation report (e.g. exported from the notebook into the repo / report appendix).
 
+## 8c. Fine-tuning run (Milestone 5)
+Fine-tune **`distilbert-base-uncased`** on the training split, then evaluate on the same locked test set used for the baseline (Section 8b) and compare. Training is fast (~5–15 min for ~200 examples on a T4); most of the time is pipeline setup.
+
+**Prereq:** Sections 1, 2, and 5 are already done from Milestone 4. **Do not re-run them unless the Colab runtime reset.** If it reset, re-upload the CSV and re-run Sections 1, 2, and 5 (re-add Groq key + prompt) — Section 6's comparison and export depend on the Section 5 baseline numbers.
+
+**Steps:**
+1. **Section 3** — loads `distilbert-base-uncased` and fine-tunes on the training split. Defaults: **3 epochs, learning rate 2e-5, batch size 16**. If any hyperparameter is changed, **record what changed and why** (goes in the README).
+2. **Section 4** — evaluates the fine-tuned model on the test set, prints per-class metrics, and writes `confusion_matrix.png`. Review the wrong predictions and **pick 3 to analyze in depth** for the README.
+3. **Section 6** — prints the side-by-side **baseline vs. fine-tuned** comparison and writes `evaluation_results.json`.
+4. **Download & commit** `evaluation_results.json` and `confusion_matrix.png` from the Colab Files panel to the GitHub repo. (Milestone 6 also renders the confusion matrix as a markdown table in the README — that text version is the one that must read cleanly; the committed `.png` is a supplementary copy.)
+
+**Reading the output (4-class task here):** per-class **F1** is the most useful single number per class — `F1 ≥ 0.70` across all four classes means the model learned every distinction; one class at `F1 ≈ 0` means that boundary isn't being learned (check labels/examples); all classes similar and low means the task is too hard for the data size or labels are inconsistent; fine-tuned barely beating baseline means fine-tuning added little (labels too easy or too noisy). On the **confusion matrix**, rows = true / columns = predicted; the diagonal is correct, and off-diagonal cells show the direction of confusion — expected residual confusion is on the case-study↔detection and profile↔emulation boundaries (Section 5).
+
+**Checkpoint (Milestone 5 done when):** fine-tuning completed without error; fine-tuned test-set results exist and are **directly comparable** to the Milestone 4 baseline; `evaluation_results.json` + `confusion_matrix.png` are committed. If the fine-tuned model is worse than the baseline across the board, investigate before writing the report — check for label leakage, class imbalance, or a training bug.
+
 ## 9. Coverage & out-of-scope
 These four purposes cover >90% of IR+ATT&CK practitioner writeups with **no "other" bucket**. Deliberately out of scope: pure tooling release notes, framework-version announcements (e.g. ATT&CK v18), and opinion/policy pieces. If those become frequent, add a 5th `tooling_release` class.
 
