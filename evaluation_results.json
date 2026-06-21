@@ -1,0 +1,13 @@
+{
+  "baseline_accuracy": NaN,
+  "finetuned_accuracy": 0.9833,
+  "improvement": NaN,
+  "test_set_size": 60,
+  "label_map": {
+    "incident_case_study": 0,
+    "detection_engineering": 1,
+    "threat_actor_profile": 2,
+    "adversary_emulation": 3
+  },
+  "model": "distilbert-base-uncased"
+}
