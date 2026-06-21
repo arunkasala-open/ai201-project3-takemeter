@@ -158,6 +158,26 @@ Fine-tune **`distilbert-base-uncased`** on the training split, then evaluate on 
 
 **Checkpoint (Milestone 5 done when):** fine-tuning completed without error; fine-tuned test-set results exist and are **directly comparable** to the Milestone 4 baseline; `evaluation_results.json` + `confusion_matrix.png` are committed. If the fine-tuned model is worse than the baseline across the board, investigate before writing the report — check for label leakage, class imbalance, or a training bug.
 
+## 8d. Evaluate, document & record (Milestone 6)
+The deliverable here is the **evaluation report in `README.md`** plus a recorded demo — not more content in this file. `planning.md` stays the design/working notes; `README.md` is the final, self-contained report for a reader who hasn't seen this doc. Don't duplicate everything; the README must stand on its own. The hardest part is honest **failure analysis** — explaining where the model fails and what that reveals about the labels, the data, or the task.
+
+**Failure-pattern surfacing (do before writing the analysis):** paste the misclassified examples into an AI tool and ask it to surface common themes (post length, a specific confused label pair, short/low-information posts, topic-vs-structure mismatch). **Then re-read the examples and verify each pattern yourself**; include what held up *and* what you corrected or discarded. (This is the Section 10 #3 failure-analysis step in practice.)
+
+**README evaluation report must include:**
+1. **Overall accuracy** for **both** models (zero-shot baseline + fine-tuned).
+2. **Per-class precision/recall/F1** for **both** models.
+3. The fine-tuned **confusion matrix written out as a markdown table directly in the README** (text, not only the committed `confusion_matrix.png`).
+4. **≥3 specific wrong predictions** with real analysis — for each: which label pair is confused (and direction), why that boundary is hard (ambiguous language / short post / topic-signals-one-label-but-structure-another), whether it's a labeling problem vs. a data/prompt problem (consistent labels but wrong → data distribution/boundary; inconsistent labels → annotation inconsistency), and what would fix it (more examples for the confused class / tighter definition / more explicit hard-case examples). "The model got it wrong" is not analysis.
+5. **Sample Classifications** subsection — 3–5 posts run through the fine-tuned model shown with predicted label + confidence (as a markdown table/list, not a screenshot), and for ≥1 correct prediction, a sentence on why it's reasonable.
+6. **Intended-vs-learned reflection** — a higher-level observation on the gap between the Section 4 label definitions and what the model's decision boundary actually captures: what it overfit to, what it missed (distinct from the per-example failure list).
+7. **Spec reflection** — one way the spec guided the implementation, one way the implementation diverged and why.
+8. **AI usage section** — ≥2 specific instances (what the AI was directed to do, what it produced, what was changed/overridden), including disclosure of any annotation pre-labeling (Section 10 #2).
+9. All other required submission-checklist sections, each substantive enough that a grader can understand the design decisions.
+
+**Demo video (3–5 min):** 3–5 posts classified by the fine-tuned model with label + confidence visible; one correct prediction narrated (why it's reasonable); one incorrect prediction narrated (what went wrong); a brief walkthrough of the evaluation report.
+
+**Checkpoint (Milestone 6 done when):** README evaluation report documents both models with per-class metrics + the markdown confusion matrix + 3 analyzed failures; the intended-vs-learned reflection addresses the gap specifically; the README covers all required sections; the demo video is recorded and shows all four required moments.
+
 ## 9. Coverage & out-of-scope
 These four purposes cover >90% of IR+ATT&CK practitioner writeups with **no "other" bucket**. Deliberately out of scope: pure tooling release notes, framework-version announcements (e.g. ATT&CK v18), and opinion/policy pieces. If those become frequent, add a 5th `tooling_release` class.
 
@@ -180,7 +200,10 @@ This is a dataset/annotation project, not an implementation project — there is
 ## 12. Deliverables
 - `ir_attack_writeup_dataset.csv` — 400 labeled examples; columns `id,label,grounding,source,url,date,attack_tactics,attack_techniques,text`.
 - `ir_attack_taxonomy_README.md` — taxonomy, deconfliction rules, verified-source list, honesty note.
-- `planning.md` — this document.
+- `planning.md` — this document (design/working notes).
+- `README.md` — final self-contained evaluation report (Milestone 6): both models' metrics, markdown confusion matrix, ≥3 analyzed failures, sample classifications, intended-vs-learned + spec reflections, AI-usage section.
+- `evaluation_results.json` + `confusion_matrix.png` — committed model-evaluation artifacts (Milestone 5).
+- Demo video (3–5 min) — fine-tuned classifications with confidence, one correct + one incorrect narrated, evaluation-report walkthrough.
 
 ## 13. Open follow-ups
 - Expand the `verified` subset further (fetch + quote more live articles per label).
