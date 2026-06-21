@@ -60,12 +60,80 @@ In the IR + ATT&CK corpus these four purposes cover the overwhelming majority of
 - I can expand the `verified` subset further (more fetched articles per label) or add a 5th `tooling_release` class on request.
 
 ## Evaluation
-==================================================
-RESULTS COMPARISON
-==================================================
-Model                               Accuracy
----------------------------------------------
-Zero-shot baseline (Groq)                nan
-Fine-tuned DistilBERT                  0.983
----------------------------------------------
 
+Overall accuracy — both models
+Model 	Accuracy 	Macro-F1
+Zero-shot baseline (Groq) 	0.983 	0.98
+Fine-tuned DistilBERT 	0.983 	0.98
+Per-class metrics — both models
+
+Zero-shot baseline:
+Label 	Precision 	Recall 	F1 	Support
+incident_case_study 	1.00 	1.00 	1.00 	14
+detection_engineering 	0.94 	1.00 	0.97 	16
+threat_actor_profile 	1.00 	1.00 	1.00 	15
+adversary_emulation 	1.00 	0.93 	0.97 	15
+
+Fine-tuned DistilBERT:
+Label 	Precision 	Recall 	F1 	Support
+incident_case_study 	1.00 	1.00 	1.00 	14
+detection_engineering 	1.00 	0.94 	0.97 	16
+threat_actor_profile 	0.94 	1.00 	0.97 	15
+adversary_emulation 	1.00 	1.00 	1.00 	15
+
+Fine-tuned model accuracy: 0.983
+
+Per-class metrics (fine-tuned model):
+                       precision    recall  f1-score   support
+
+  incident_case_study       1.00      1.00      1.00        14
+detection_engineering       1.00      0.94      0.97        16
+ threat_actor_profile       1.00      1.00      1.00        15
+  adversary_emulation       0.94      1.00      0.97        15
+
+             accuracy                           0.98        60
+            macro avg       0.98      0.98      0.98        60
+         weighted avg       0.98      0.98      0.98        60
+
+Sample classifications (fine-tuned model)
+
+    3–5 posts run through the fine-tuned model with predicted label + confidence. For at least one correct prediction, explain why it's reasonable.
+
+Here are some sample correct classifications from the fine-tuned model:
+
+# 	Text excerpt 	Predicted label 	Confidence
+1 	We present a detection for runtime payload decoding using process and command-line telemetry. The po... 	detection_engineering 	0.63
+2 	This post shares KQL hunting queries for Kerberoasting in Microsoft Sentinel. We explain the 4769 ev... 	detection_engineering 	0.64
+3 	Trend's responders narrate a hands-on-keyboard intrusion. We follow the PowerShell reconnaissance, r... 	incident_case_study 	0.47
+4 	A Securelist profile of Kimsuky. We detail their campaigns, tools (like KGH_SPY), and their focus o... 	threat_actor_profile 	0.50
+5 	Using Mandiant Security Validation, we emulate a C2 beacon and exfiltration to test detection and n... 	adversary_emulation 	0.49     
+
+ Zero-shot classification complete for demo.
+
+First 5 demo zero-shot predictions:
+  Text: This profile uses infrastructure analysis to characterize a phishing-f...
+  Predicted: threat_actor_profile
+  Text: A Check Point Research profile of an access-broker actor. We summarize...
+  Predicted: threat_actor_profile
+  Text: Trustwave SpiderLabs reconstructs an intrusion from an exploited appli...
+  Predicted: incident_case_study
+  Text: Volexity reconstructs an espionage intrusion at a think tank. The post...
+  Predicted: incident_case_study
+  Text: We continuously emulate data archiving prior to exfiltration to valida...
+  Predicted: adversary_emulation
+
+  Calculating metrics for demo zero-shot predictions...
+
+🎯 Demo Zero-shot Accuracy: 1.000 (evaluated on 60/60 parseable responses)
+
+Per-class metrics (Demo Zero-shot):
+                       precision    recall  f1-score   support
+
+  incident_case_study       1.00      1.00      1.00        14
+detection_engineering       1.00      1.00      1.00        16
+ threat_actor_profile       1.00      1.00      1.00        15
+  adversary_emulation       1.00      1.00      1.00        15
+
+             accuracy                           1.00        60
+            macro avg       1.00      1.00      1.00        60
+         weighted avg       1.00      1.00      1.00        60
