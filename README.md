@@ -60,12 +60,12 @@ In the IR + ATT&CK corpus these four purposes cover the overwhelming majority of
 - I can expand the `verified` subset further (more fetched articles per label) or add a 5th `tooling_release` class on request.
 
 ## Evaluation
-print("RESULTS COMPARISON")
-print(f"{'Model':<35} {'Accuracy':>8}")
-print(f"{'Zero-shot baseline (Groq)':<35} {bl_accuracy:>8.3f}")
-print(f"{'Fine-tuned DistilBERT':<35} {ft_accuracy:>8.3f}")
-delta = ft_accuracy - bl_accuracy
-direction = "improvement" if delta >= 0 else "regression"
-print(f"\nFine-tuning {direction}: {abs(delta):.3f}")
-print()
-print("Use these numbers in your README evaluation report.")
+==================================================
+RESULTS COMPARISON
+==================================================
+Model                               Accuracy
+---------------------------------------------
+Zero-shot baseline (Groq)                nan
+Fine-tuned DistilBERT                  0.983
+---------------------------------------------
+
