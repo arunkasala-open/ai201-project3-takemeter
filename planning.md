@@ -129,6 +129,20 @@ Evaluated on the held-out test set, the classifier is:
 
 These are pass/fail at the end of the run: each is a number the notebook already produces, so the verdict is objective.
 
+## 8b. Baseline run (Milestone 4)
+Before any fine-tuning, establish a **zero-shot LLM baseline** on the locked test set so the fine-tuned model's numbers have a reference point. A zero-shot prompt is a legitimate baseline: it measures how hard the task is for a general model with no training. **Run this before touching the training data.**
+
+**Notebook setup (run in order — Section 5 depends on variables from Sections 1–2):**
+1. Open the starter Colab notebook; confirm the runtime is set to **T4 GPU** before running any cells.
+2. **Section 1** — define the label map and upload the single labeled CSV (`ir_attack_writeup_dataset.csv`) when prompted. No manual placement in Drive needed. If the Colab session disconnects, re-upload and re-run Sections 1–2.
+3. **Section 2** — the notebook splits the dataset **70% / 15% / 15%** (train / val / test) and tokenizes all splits. Review the split sizes and per-label distribution to confirm they look reasonable (stratification should preserve the ~balanced 4-class distribution from Section 6).
+4. **Section 5** — add the **Groq API key** via Colab Secrets or directly in the cell (**never commit it to GitHub**). Write the classification prompt: include the Section 4 label definitions verbatim and instruct the model to **output only the label name** — the notebook's parser depends on a clean, consistent response.
+5. Run the baseline cells. The notebook classifies every test-set example, prints **overall accuracy + per-class metrics**, and flags unparseable responses. **If >~10% of responses are unparseable, revise the prompt** to make the expected output format clearer, then re-run.
+
+**Reflection (record before fine-tuning):** note where the baseline struggled and which labels it consistently confuses, and write down a hypothesis to test after fine-tuning. Expectation from Section 5: residual confusion should concentrate on the case-study↔detection and profile↔emulation boundaries; anything scattered across non-adjacent labels is a signal to revisit.
+
+**Checkpoint (Milestone 4 done when):** baseline overall accuracy **and** at least a per-class breakdown exist for the test set, the fine-tuned model has **not** yet been run on this test set, and the baseline numbers are **saved somewhere referenceable** for the evaluation report (e.g. exported from the notebook into the repo / report appendix).
+
 ## 9. Coverage & out-of-scope
 These four purposes cover >90% of IR+ATT&CK practitioner writeups with **no "other" bucket**. Deliberately out of scope: pure tooling release notes, framework-version announcements (e.g. ATT&CK v18), and opinion/policy pieces. If those become frequent, add a 5th `tooling_release` class.
 
@@ -156,4 +170,4 @@ This is a dataset/annotation project, not an implementation project — there is
 ## 13. Open follow-ups
 - Expand the `verified` subset further (fetch + quote more live articles per label).
 - Add a 5th `tooling_release` class if tooling/version posts become frequent.
-- Stratified 85/15 train/validation split by `label`; optionally evaluate on `grounding == verified` only.
+- The notebook produces a stratified **70/15/15 train/val/test** split by `label` (see Section 8b); the 15% test split is the locked held-out set used for the baseline and final evaluation. Optionally re-evaluate on `grounding == verified` only.
